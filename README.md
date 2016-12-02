@@ -1,7 +1,7 @@
 Package captcha
 =====================
 
-	import "github.com/webx-top/webx/lib/captcha"
+	import "github.com/webx-top/captcha"
 
 Package captcha implements generation and verification of image and audio
 CAPTCHAs.
