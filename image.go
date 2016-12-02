@@ -28,7 +28,6 @@ type Image struct {
 	numWidth  int
 	numHeight int
 	dotSize   int
-
 }
 
 func randomPalette() color.Palette {
@@ -81,7 +80,6 @@ func NewImage(digits []byte, width, height int) *Image {
 	return m
 }
 
-
 // BUG(dchest): While Image conforms to io.WriterTo interface, its WriteTo
 // method returns 0 instead of the actual bytes written because png.Encode
 // doesn't report this.
@@ -119,6 +117,9 @@ func (m *Image) calculateSizes(width, height, ncount int) {
 	}
 	// Calculate dot size.
 	m.dotSize = int(nh / fh)
+	if m.dotSize < 1 {
+		m.dotSize = 1
+	}
 	// Save everything, making the actual width smaller by 1 dot to account
 	// for spacing between digits.
 	m.numWidth = int(nw) - m.dotSize
