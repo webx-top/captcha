@@ -7,11 +7,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/webx-top/webx/lib/captcha"
 	"io"
 	"log"
 	"net/http"
 	"text/template"
+
+	"github.com/webx-top/captcha"
 )
 
 var formTemplate = template.Must(template.New("example").Parse(formTemplateSrc))

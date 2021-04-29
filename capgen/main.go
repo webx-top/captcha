@@ -8,10 +8,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/webx-top/webx/lib/captcha"
 	"io"
 	"log"
 	"os"
+
+	"github.com/webx-top/captcha"
 )
 
 var (
