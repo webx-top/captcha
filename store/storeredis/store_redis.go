@@ -1,4 +1,4 @@
-package captcha
+package storeredis
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v8"
+	"github.com/webx-top/captcha"
 )
 
 // Logger Define the log output interface
@@ -13,10 +14,10 @@ type Logger interface {
 	Printf(format string, args ...interface{})
 }
 
-var _ Store = &redisStore{}
+var _ captcha.Store = &redisStore{}
 
 // NewRedisStore create an instance of a redis store
-func NewRedisStore(opts *redis.Options, expiration time.Duration, out Logger, prefix ...string) Store {
+func NewRedisStore(opts *redis.Options, expiration time.Duration, out Logger, prefix ...string) captcha.Store {
 	return NewRedisStoreWithCli(
 		redis.NewClient(opts),
 		expiration,
@@ -26,7 +27,7 @@ func NewRedisStore(opts *redis.Options, expiration time.Duration, out Logger, pr
 }
 
 // NewRedisStoreWithCli create an instance of a redis store
-func NewRedisStoreWithCli(cli *redis.Client, expiration time.Duration, out Logger, prefix ...string) Store {
+func NewRedisStoreWithCli(cli *redis.Client, expiration time.Duration, out Logger, prefix ...string) captcha.Store {
 	store := &redisStore{
 		cli:        cli,
 		expiration: expiration,
@@ -39,7 +40,7 @@ func NewRedisStoreWithCli(cli *redis.Client, expiration time.Duration, out Logge
 }
 
 // NewRedisClusterStore create an instance of a redis cluster store
-func NewRedisClusterStore(opts *redis.ClusterOptions, expiration time.Duration, out Logger, prefix ...string) Store {
+func NewRedisClusterStore(opts *redis.ClusterOptions, expiration time.Duration, out Logger, prefix ...string) captcha.Store {
 	return NewRedisClusterStoreWithCli(
 		redis.NewClusterClient(opts),
 		expiration,
@@ -49,7 +50,7 @@ func NewRedisClusterStore(opts *redis.ClusterOptions, expiration time.Duration, 
 }
 
 // NewRedisClusterStoreWithCli create an instance of a redis cluster store
-func NewRedisClusterStoreWithCli(cli *redis.ClusterClient, expiration time.Duration, out Logger, prefix ...string) Store {
+func NewRedisClusterStoreWithCli(cli *redis.ClusterClient, expiration time.Duration, out Logger, prefix ...string) captcha.Store {
 	store := &redisStore{
 		cli:        cli,
 		expiration: expiration,
@@ -90,7 +91,6 @@ func (s *redisStore) Set(id string, digits []byte) {
 	if err := cmd.Err(); err != nil {
 		s.printf("redis execution set command error: %s", err.Error())
 	}
-	return
 }
 
 func (s *redisStore) Get(id string, clear bool) []byte {

@@ -1,4 +1,4 @@
-package captcha
+package storeredis
 
 import (
 	"bytes"
